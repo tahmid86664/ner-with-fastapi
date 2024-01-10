@@ -12,6 +12,8 @@ from io import BytesIO
 import base64
 from collections import Counter
 
+from preprocessing import preprocessing
+
 app = FastAPI()
 
 # Load SpaCy NLP model
@@ -56,6 +58,11 @@ class TextRequest(BaseModel):
 @app.get('/')
 def __index__():
   return "Hello from Our NER with FastAPI Project"
+
+@app.post('/text-preprocess')
+def text_preprocessing(request: TextRequest):
+  preprocessed_text = preprocessing(request.text)
+  return preprocessed_text
 
 @app.post("/wordcloud-named-entities", response_class=HTMLResponse)
 async def generate_wordcloud(request: TextRequest):
